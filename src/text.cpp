@@ -159,8 +159,6 @@ void draw_string_at(Hub75& dst, uint32_t x, uint32_t y, const char* str, JUSTIFY
         auto it = kerning_table.find(std::make_pair(prev_char,curr_char));
         if (it != kerning_table.end()) {
             kern = it->second;
-        } else {
-            printf("no kerning entry for %c,%c\n",prev_char,curr_char);
         }
         x_off += kern;
 

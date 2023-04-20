@@ -33,7 +33,7 @@ RV1805_CAP_RC = 0x26
 
 REG_DEVID = 0x00
 REG_POWER_CTL = 0x2D
-REG_DATAX0 = 0x32
+
 
 ###############################################################################
 # Settings
@@ -59,27 +59,27 @@ def reg_write(i2c, addr, reg, data):
     """
     Write bytes to the specified register.
     """
-    
+
     # Construct message
     msg = bytearray()
     msg.append(data)
-    
+
     # Write out message to register
     i2c.writeto_mem(addr, reg, msg)
-    
+
 def reg_read(i2c, addr, reg, nbytes=1):
     """
     Read byte(s) from specified register. If nbytes > 1, read from consecutive
     registers.
     """
-    
+
     # Check to make sure caller is asking for 1 or more bytes
     if nbytes < 1:
         return bytearray()
-    
+
     # Request data from specified register(s) over I2C
     data = i2c.readfrom_mem(addr, reg, nbytes)
-    
+
     return data
 
 ###############################################################################
@@ -90,25 +90,25 @@ data = reg_read(i2c, RV1805_ADDR, RV1805_ID0)
 if (data != bytearray((RV1805_PART_NUMBER_UPPER,))):
     print("ERROR: Could not communicate with RV1805")
     sys.exit()
-    
-reg_write(i2c, RV1805_ADDR, RV1805_CONF_KEY, RV1805_CONF_WRT) #Enable write access to the CAPRC Register (26h)                                     
-reg_write(i2c, RV1805_ADDR, RV1805_CAP_RC, 0xA0); #Enable Cap_RC pin                                                                                
+
+reg_write(i2c, RV1805_ADDR, RV1805_CONF_KEY, RV1805_CONF_WRT) #Enable write access to the CAPRC Register (26h)
+reg_write(i2c, RV1805_ADDR, RV1805_CAP_RC, 0xA0); #Enable Cap_RC pin
 
 # enable tricklecharge
-reg_write(i2c, RV1805_ADDR, RV1805_CONF_KEY, RV1805_CONF_WRT) #Enable write access to the CAPRC Register (26h)                                     
+reg_write(i2c, RV1805_ADDR, RV1805_CONF_KEY, RV1805_CONF_WRT) #Enable write access to the CAPRC Register (26h)
 value = 0b10100101
 reg_write(i2c, RV1805_ADDR, RV1805_TRICKLE_CHRG, value)
 
 # enable lowpower
-reg_write(i2c, RV1805_ADDR, RV1805_CONF_KEY, RV1805_CONF_WRT) #Enable write access to the CAPRC Register (26h)                                     
+reg_write(i2c, RV1805_ADDR, RV1805_CONF_KEY, RV1805_CONF_WRT) #Enable write access to the CAPRC Register (26h)
 reg_write(i2c, RV1805_ADDR, RV1805_IOBATMODE, 0)
-reg_write(i2c, RV1805_ADDR, RV1805_CONF_KEY, RV1805_CONF_WRT) #Enable write access to the CAPRC Register (26h)                                     
+reg_write(i2c, RV1805_ADDR, RV1805_CONF_KEY, RV1805_CONF_WRT) #Enable write access to the CAPRC Register (26h)
 reg_write(i2c, RV1805_ADDR, RV1805_OUT_CTRL, 0x30)
 
 data = reg_read(i2c, RV1805_ADDR, RV1805_CTRL1)
 #print("data = " + str(data[0]))
 if (data[0] & 1<<2) != 0:
-    print("ARST is true")    
+    print("ARST is true")
 if (data[0] & 1<<3) != 0:
     print("RSTP is true")
 if (data[0] & 1<<5) != 0:
@@ -123,7 +123,6 @@ reg_write(i2c, RV1805_ADDR, RV1805_CTRL1, value)
 
 # Read Power Control register
 data = reg_read(i2c, RV1805_ADDR, REG_POWER_CTL)
-#print(str(data[0]))
 
 t = time.localtime()
 

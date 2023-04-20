@@ -24,7 +24,6 @@ Hub75 hub75(FB_WIDTH, FB_HEIGHT, nullptr, PANEL_GENERIC, true);
 //#define USE_PERSON_SENSOR 1
 #define USE_RV1805 1
 
-//#define PERSON_SENSOR_I2C_ADDRESS (0x62)
 const int32_t I2C_BAUD_RATE = (400 * 1000);
 const uint I75_SDA_PIN = 20; // was PICO_DEFAULT_I2C_SDA_PIN
 const uint I75_SCL_PIN = 21; // was PICO_DEFAULT_I2C_SCL_PIN
@@ -72,7 +71,7 @@ int main() {
         read_time(time_results);
 
 
-        sprintf(buff,"%d:%d:%d",time_results.hours,time_results.minutes,time_results.seconds);
+        sprintf(buff,"%d:%02d:%02d",time_results.hours,time_results.minutes,time_results.seconds);
         draw_string_at(hub75,8,GRID_HEIGHT/2 - 4,buff,TOP_LEFT);
 
         sprintf(buff,"%d/%d/%d",time_results.day,time_results.month,time_results.year);
